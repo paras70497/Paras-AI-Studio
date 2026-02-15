@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Paras AI Studio - Translate Tool</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Satoshi:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3b82f6", // Adjusted to a slightly crisper blue
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#050505", // Requested near-black
+                        "surface-dark": "#0a0a0a", // Slightly lighter for sidebar
+                        "glass-border": "rgba(255, 255, 255, 0.04)", // Thinner, more subtle
+                        "glass-surface": "rgba(255, 255, 255, 0.02)",
+                    },
+                    fontFamily: {
+                        "display": ["Satoshi", "Inter", "sans-serif"], // Updated to Satoshi
+                        "body": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                    backdropBlur: {
+                        'xs': '2px',
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #050505;
+        }textarea::-webkit-scrollbar, .overflow-y-auto::-webkit-scrollbar {
+            width: 6px;
+        }
+        textarea::-webkit-scrollbar-track, .overflow-y-auto::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        textarea::-webkit-scrollbar-thumb, .overflow-y-auto::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1); 
+            border-radius: 4px;
+        }
+        textarea::-webkit-scrollbar-thumb:hover, .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2); 
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.015);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+        .glass-sidebar {
+            background: rgba(5, 5, 5, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.04);
+        }.particle-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+            background-image: 
+                radial-gradient(1px 1px at 10% 10%, rgba(255,255,255,0.15) 1px, transparent 0),
+                radial-gradient(1px 1px at 20% 20%, rgba(255,255,255,0.1) 1px, transparent 0),
+                radial-gradient(1.5px 1.5px at 30% 30%, rgba(255,255,255,0.1) 1px, transparent 0),
+                radial-gradient(2px 2px at 40% 40%, rgba(255,255,255,0.05) 1px, transparent 0),
+                radial-gradient(1px 1px at 50% 50%, rgba(255,255,255,0.12) 1px, transparent 0),
+                radial-gradient(1px 1px at 60% 60%, rgba(255,255,255,0.08) 1px, transparent 0),
+                radial-gradient(1.5px 1.5px at 70% 70%, rgba(255,255,255,0.05) 1px, transparent 0),
+                radial-gradient(2px 2px at 80% 80%, rgba(255,255,255,0.03) 1px, transparent 0),
+                radial-gradient(1px 1px at 90% 90%, rgba(255,255,255,0.1) 1px, transparent 0);
+            background-size: 550px 550px;
+            opacity: 0.6;
+            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+            -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+        }
+        .noise-texture {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+        .title-display {
+            font-family: 'Satoshi', sans-serif;
+            letter-spacing: -0.03em;
+        }
+        .button-sharp {
+            border-radius: 4px;}
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-gray-900 dark:text-white h-screen overflow-hidden flex font-body antialiased selection:bg-white/20 selection:text-white">
+<div class="noise-texture"></div>
+<div class="particle-container"></div>
+<div class="fixed top-[-20%] right-[-10%] w-[800px] h-[800px] bg-blue-600/5 rounded-full blur-[120px] pointer-events-none"></div>
+<div class="fixed bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-purple-600/5 rounded-full blur-[100px] pointer-events-none"></div>
+<aside class="glass-sidebar w-20 lg:w-72 h-full flex flex-col justify-between z-20 transition-all duration-300 relative border-r border-white/5">
+<div>
+<div class="h-24 flex items-center px-6 lg:px-8">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-lg shadow-white/10">
+<span class="material-icons-round text-black text-lg">auto_awesome</span>
+</div>
+<span class="hidden lg:block font-display font-bold text-xl tracking-tight text-white">Paras AI</span>
+</div>
+</div>
+<nav class="mt-8 px-4 space-y-1">
+<a class="flex items-center gap-4 px-4 py-3 text-gray-500 hover:text-white hover:bg-white/5 rounded-lg transition-all group" href="#">
+<span class="material-icons-round group-hover:text-white transition-colors text-xl">dashboard</span>
+<span class="hidden lg:block font-medium text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-white bg-white/5 border border-white/10 rounded-lg shadow-none transition-all group relative overflow-hidden" href="#">
+<span class="material-icons-round text-white text-xl">translate</span>
+<span class="hidden lg:block font-semibold text-sm z-10">Translate</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-gray-500 hover:text-white hover:bg-white/5 rounded-lg transition-all group" href="#">
+<span class="material-icons-round group-hover:text-white transition-colors text-xl">edit_note</span>
+<span class="hidden lg:block font-medium text-sm">Write</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-gray-500 hover:text-white hover:bg-white/5 rounded-lg transition-all group" href="#">
+<span class="material-icons-round group-hover:text-white transition-colors text-xl">code</span>
+<span class="hidden lg:block font-medium text-sm">Code Studio</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-gray-500 hover:text-white hover:bg-white/5 rounded-lg transition-all group" href="#">
+<span class="material-icons-round group-hover:text-white transition-colors text-xl">history</span>
+<span class="hidden lg:block font-medium text-sm">History</span>
+</a>
+</nav>
+</div>
+<div class="p-4 border-t border-white/5">
+<button class="w-full flex items-center gap-3 px-2 py-2 hover:bg-white/5 rounded-lg transition-colors">
+<div class="relative">
+<img alt="User Profile" class="w-8 h-8 rounded-full border border-white/20 grayscale hover:grayscale-0 transition-all" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkmgD1j7G8RMLd3rp6ePzZIb_R3nlji4G8B6JGGXCZMNVyNFI_kYUsUNtORXZ-1VFXuU02LmJXtossaNdGEqxVjiCBic6MwxIApPM3Sg35Bk14uGUiSk5hQCw1lLiYcjMqCn_t0xcLbAgcv25u4Ee4Wo6zslSKPw7GDQomjoDwijYezQ_gGdEfIW_knEq4yvMfFcDiCpZPB8RYX9lkJjKq4KkBbc04QiUatGep8XXNavKf1cHJLHNM5-rNe2NQ9oX9AbLs1pnp5bqz"/>
+<div class="absolute bottom-0 right-0 w-2 h-2 bg-white rounded-full border-2 border-black"></div>
+</div>
+<div class="hidden lg:block text-left">
+<p class="text-sm font-medium text-white">Alex Morgan</p>
+<p class="text-[10px] uppercase tracking-wider text-gray-500">Pro Plan</p>
+</div>
+<span class="material-icons-round text-gray-600 ml-auto hidden lg:block text-sm">more_vert</span>
+</button>
+</div>
+</aside>
+<main class="flex-1 flex flex-col h-full relative z-10">
+<header class="h-24 px-8 flex items-center justify-between border-b border-white/5 bg-transparent backdrop-blur-sm">
+<div>
+<h1 class="text-3xl lg:text-4xl font-display font-medium text-white tracking-tighter flex items-center gap-3 title-display">
+                Translate
+                <span class="px-2 py-1 rounded text-white text-[10px] font-mono border border-white/20 opacity-60 font-normal tracking-widest">BETA</span>
+</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center bg-black/40 rounded-lg p-1 border border-white/10">
+<button class="px-5 py-1.5 rounded bg-white text-black text-xs font-bold uppercase tracking-wide shadow-lg shadow-white/5 transition-all">Formal</button>
+<button class="px-5 py-1.5 rounded text-xs font-medium text-gray-500 hover:text-white transition-all uppercase tracking-wide">Casual</button>
+</div>
+<div class="h-6 w-px bg-white/10"></div>
+<button class="p-2 text-gray-500 hover:text-white transition-colors">
+<span class="material-icons-round text-xl">settings</span>
+</button>
+<button class="p-2 text-gray-500 hover:text-white transition-colors">
+<span class="material-icons-round text-xl">notifications</span>
+</button>
+</div>
+</header>
+<div class="flex-1 p-6 lg:p-10 flex flex-col items-center justify-center overflow-y-auto">
+<div class="flex items-center gap-6 mb-10">
+<button class="flex items-center gap-3 px-2 py-1 text-white text-lg font-display font-medium group hover:opacity-80 transition-opacity">
+<span>Hindi</span>
+<span class="material-icons-round text-gray-600 group-hover:text-white transition-colors text-base">expand_more</span>
+</button>
+<span class="material-icons-round text-gray-700 text-lg">arrow_forward</span>
+<button class="flex items-center gap-3 px-2 py-1 text-white text-lg font-display font-medium group hover:opacity-80 transition-opacity">
+<span>English (US)</span>
+<span class="material-icons-round text-gray-600 group-hover:text-white transition-colors text-base">expand_more</span>
+</button>
+</div>
+<div class="w-full max-w-7xl flex flex-col lg:flex-row gap-6 lg:gap-8 h-[600px] relative">
+<div class="glass-panel flex-1 rounded-[16px] p-8 flex flex-col relative group hover:border-white/10 transition-colors duration-500">
+<div class="flex justify-between items-center mb-6">
+<span class="text-[10px] font-bold text-gray-600 uppercase tracking-[0.2em] font-display">Source</span>
+<div class="flex gap-3">
+<button class="text-gray-600 hover:text-white transition-colors" title="Paste">
+<span class="material-icons-round text-base">content_paste</span>
+</button>
+<button class="text-gray-600 hover:text-white transition-colors" title="Clear">
+<span class="material-icons-round text-base">close</span>
+</button>
+</div>
+</div>
+<textarea class="w-full flex-1 bg-transparent border-none resize-none focus:ring-0 text-2xl lg:text-3xl text-white placeholder-gray-800 leading-normal font-display font-light tracking-tight" placeholder="Enter text...">नमस्ते, आप कैसे हैं? मुझे आशा है कि आपका दिन शुभ हो।</textarea>
+<div class="mt-6 pt-6 border-t border-white/5 flex justify-between items-center">
+<span class="text-[10px] text-gray-600 font-mono tracking-wider">54 / 5000</span>
+<div class="flex items-center gap-4">
+<button class="text-gray-500 hover:text-white transition-colors flex items-center gap-2 text-xs uppercase tracking-wider font-semibold">
+<span class="material-icons-round text-sm">mic</span>
+                            Dictate
+                        </button>
+<button class="text-gray-500 hover:text-white transition-colors flex items-center gap-2 text-xs uppercase tracking-wider font-semibold">
+<span class="material-icons-round text-sm">upload_file</span>
+                            Upload
+                        </button>
+</div>
+</div>
+</div>
+<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 hidden lg:block pointer-events-none">
+<div class="w-12 h-12 flex items-center justify-center rounded-full bg-black border border-white/20 shadow-[0_0_30px_rgba(255,255,255,0.1)] pointer-events-auto cursor-pointer hover:border-white/40 transition-all group">
+<span class="material-icons-round text-white text-xl group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
+</div>
+</div>
+<div class="lg:hidden w-full flex justify-center py-2">
+<button class="w-full py-4 bg-white text-black rounded-lg font-bold uppercase tracking-widest text-xs shadow-lg shadow-white/10">Translate</button>
+</div>
+<div class="glass-panel flex-1 rounded-[16px] p-8 flex flex-col relative bg-gradient-to-br from-white/[0.02] to-transparent">
+<div class="flex justify-between items-center mb-6">
+<span class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] font-display flex items-center gap-2">
+<span class="w-1 h-1 rounded-full bg-white animate-pulse-slow"></span>
+                        Translated
+                    </span>
+<div class="flex gap-3">
+<button class="text-gray-600 hover:text-white transition-colors" title="Copy">
+<span class="material-icons-round text-base">content_copy</span>
+</button>
+<button class="text-gray-600 hover:text-white transition-colors" title="Favorite">
+<span class="material-icons-round text-base">bookmark_border</span>
+</button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto">
+<p class="text-2xl lg:text-3xl text-white leading-normal font-display font-light tracking-tight animate-[fadeIn_0.5s_ease-out]">
+                        Hello, how are you? I hope you have a wonderful day.
+                    </p>
+<div class="mt-12 space-y-4 opacity-0 animate-[fadeIn_0.5s_ease-out_0.2s_forwards]">
+<p class="text-[10px] text-gray-600 font-bold uppercase tracking-[0.2em] mb-3">Refinements</p>
+<div class="p-4 rounded-lg border border-white/5 hover:border-white/20 hover:bg-white/[0.02] transition-all cursor-pointer group">
+<p class="text-base text-gray-400 group-hover:text-gray-200 font-light">Hi, how are things going? Wishing you a great day ahead.</p>
+<span class="text-[9px] uppercase tracking-widest text-gray-600 mt-2 block group-hover:text-gray-500">Casual</span>
+</div>
+<div class="p-4 rounded-lg border border-white/5 hover:border-white/20 hover:bg-white/[0.02] transition-all cursor-pointer group">
+<p class="text-base text-gray-400 group-hover:text-gray-200 font-light">Greetings, how do you do? I trust your day goes well.</p>
+<span class="text-[9px] uppercase tracking-widest text-gray-600 mt-2 block group-hover:text-gray-500">Formal</span>
+</div>
+</div>
+</div>
+<div class="mt-6 pt-6 border-t border-white/5 flex justify-between items-center">
+<div class="flex gap-3">
+<button class="text-gray-600 hover:text-white p-1 transition-colors">
+<span class="material-icons-round text-base">thumb_up</span>
+</button>
+<button class="text-gray-600 hover:text-white p-1 transition-colors">
+<span class="material-icons-round text-base">thumb_down</span>
+</button>
+</div>
+<button class="text-gray-400 hover:text-white transition-colors flex items-center gap-2 text-xs uppercase tracking-wider font-semibold">
+<span class="material-icons-round text-sm">autorenew</span>
+                        Regenerate
+                    </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+</body></html>
