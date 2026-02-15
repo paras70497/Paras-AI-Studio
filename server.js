@@ -124,6 +124,20 @@ app.post('/api/chat', async (req, res) => {
       body: JSON.stringify(req.body),
     });
     const data = await response.json();
+
+    // Replace any Sarvam references with Paras in chat responses
+    if (data.choices) {
+      data.choices.forEach(choice => {
+        if (choice.message && choice.message.content) {
+          choice.message.content = choice.message.content
+            .replace(/Sarvam AI/gi, 'Paras')
+            .replace(/Sarvam/gi, 'Paras')
+            .replace(/sarvam-m/gi, 'Paras AI')
+            .replace(/SarvamAI/gi, 'Paras');
+        }
+      });
+    }
+
     res.json(data);
   } catch (err) {
     res.status(500).json({ error: err.message });
