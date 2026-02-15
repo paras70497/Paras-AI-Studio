@@ -431,3 +431,59 @@
 .vc-visualizer {
   opacity: 0.8;
 }
+
+/* ── Mobile Bottom Nav ── */
+.mobile-bottom-nav {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.mobile-nav-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 2px 4px;
+  color: #6b7280;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s;
+  min-width: 0;
+  flex: 1;
+}
+.mobile-nav-btn.active {
+  color: white;
+  background: rgba(255, 255, 255, 0.08);
+}
+.mobile-nav-btn:active {
+  transform: scale(0.92);
+}
+
+/* ── Mobile Overrides ── */
+@media (max-width: 767px) {
+  body {
+    flex-direction: column;
+  }
+  .glass-select {
+    font-size: 12px;
+    padding: 0.4rem 1.6rem 0.4rem 0.6rem;
+  }
+  .chat-bubble {
+    max-width: 90%;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+  .vc-orb-ring {
+    width: 90px; height: 90px;
+  }
+  .vc-msg-text {
+    font-size: 0.8rem;
+  }
+  .toast {
+    top: auto;
+    bottom: 80px;
+    right: 12px;
+    left: 12px;
+    text-align: center;
+  }
+}

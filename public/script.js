@@ -33,10 +33,12 @@ const SCRIPT_LABELS = {
 function switchPage(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.mobile-nav-btn').forEach(n => n.classList.remove('active'));
   $(`page-${page}`).classList.add('active');
-  document.querySelector(`[data-page="${page}"]`).classList.add('active');
-  // Close sidebar on mobile
-  $('sidebar').classList.remove('open');
+  // Highlight desktop sidebar
+  document.querySelector(`.nav-item[data-page="${page}"]`)?.classList.add('active');
+  // Highlight mobile bottom nav
+  document.querySelector(`.mobile-nav-btn[data-page="${page}"]`)?.classList.add('active');
 }
 
 // ── Character Counters ──

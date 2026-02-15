@@ -46,8 +46,8 @@
   <div class="fixed top-[-20%] right-[-10%] w-[800px] h-[800px] bg-blue-600/5 rounded-full blur-[120px] pointer-events-none"></div>
   <div class="fixed bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-purple-600/5 rounded-full blur-[100px] pointer-events-none"></div>
 
-  <!-- ═══════════════ SIDEBAR ═══════════════ -->
-  <aside class="glass-sidebar w-20 lg:w-72 h-full flex flex-col justify-between z-20 transition-all duration-300 relative" id="sidebar">
+  <!-- ═══════════════ SIDEBAR (desktop) ═══════════════ -->
+  <aside class="glass-sidebar hidden md:flex w-20 lg:w-72 h-full flex-col justify-between z-20 transition-all duration-300 relative" id="sidebar">
     <div>
       <div class="h-24 flex items-center px-6 lg:px-8">
         <div class="flex items-center gap-3">
@@ -90,18 +90,51 @@
         </button>
       </nav>
     </div>
-
   </aside>
+
+  <!-- ═══════════════ BOTTOM NAV (mobile) ═══════════════ -->
+  <nav class="mobile-bottom-nav md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#0a0a0a]/95 backdrop-blur-xl border-t border-white/5 px-1 py-1 safe-bottom" id="mobile-nav">
+    <div class="flex items-center justify-around">
+      <button class="mobile-nav-btn active" data-page="translate" onclick="switchPage('translate')">
+        <span class="material-icons-round text-[20px]">translate</span>
+        <span class="text-[9px] mt-0.5">Translate</span>
+      </button>
+      <button class="mobile-nav-btn" data-page="tts" onclick="switchPage('tts')">
+        <span class="material-icons-round text-[20px]">record_voice_over</span>
+        <span class="text-[9px] mt-0.5">TTS</span>
+      </button>
+      <button class="mobile-nav-btn" data-page="stt" onclick="switchPage('stt')">
+        <span class="material-icons-round text-[20px]">mic</span>
+        <span class="text-[9px] mt-0.5">STT</span>
+      </button>
+      <button class="mobile-nav-btn" data-page="transliterate" onclick="switchPage('transliterate')">
+        <span class="material-icons-round text-[20px]">spellcheck</span>
+        <span class="text-[9px] mt-0.5">Translit</span>
+      </button>
+      <button class="mobile-nav-btn" data-page="detect" onclick="switchPage('detect')">
+        <span class="material-icons-round text-[20px]">language</span>
+        <span class="text-[9px] mt-0.5">Detect</span>
+      </button>
+      <button class="mobile-nav-btn" data-page="chat" onclick="switchPage('chat')">
+        <span class="material-icons-round text-[20px]">smart_toy</span>
+        <span class="text-[9px] mt-0.5">Chat</span>
+      </button>
+      <button class="mobile-nav-btn" data-page="voicechat" onclick="switchPage('voicechat')">
+        <span class="material-icons-round text-[20px]">graphic_eq</span>
+        <span class="text-[9px] mt-0.5">Voice</span>
+      </button>
+    </div>
+  </nav>
 
   <!-- ═══════════════ MAIN CONTENT ═══════════════ -->
   <main class="flex-1 flex flex-col h-full relative z-10 overflow-hidden">
 
     <!-- ──── TRANSLATE PAGE ──── -->
     <section class="page active" id="page-translate">
-      <header class="h-20 px-8 flex items-center justify-between border-b border-white/5 bg-transparent backdrop-blur-sm shrink-0">
-        <h1 class="text-3xl font-display font-medium text-white tracking-tighter flex items-center gap-3">
+      <header class="h-14 md:h-20 px-4 md:px-8 flex items-center justify-between border-b border-white/5 bg-transparent backdrop-blur-sm shrink-0">
+        <h1 class="text-xl md:text-3xl font-display font-medium text-white tracking-tighter flex items-center gap-2 md:gap-3">
           Translate
-          <span class="px-2 py-0.5 rounded text-[10px] font-mono border border-white/20 opacity-60 tracking-widest">Frakey V1</span>
+          <span class="px-2 py-0.5 rounded text-[9px] md:text-[10px] font-mono border border-white/20 opacity-60 tracking-widest">Frakey V1</span>
         </h1>
         <select id="tr-mode" class="glass-select text-xs">
           <option value="formal">Formal</option>
@@ -109,48 +142,48 @@
           <option value="classic-colloquial">Classic</option>
         </select>
       </header>
-      <div class="flex-1 p-6 lg:p-10 flex flex-col items-center justify-center overflow-y-auto">
-        <div class="flex items-center gap-6 mb-8">
-          <select id="tr-source" class="glass-select">
+      <div class="flex-1 p-3 md:p-6 lg:p-10 flex flex-col items-center justify-start md:justify-center overflow-y-auto pb-20 md:pb-6">
+        <div class="flex items-center gap-2 md:gap-6 mb-4 md:mb-8 flex-wrap justify-center">
+          <select id="tr-source" class="glass-select text-xs md:text-sm">
             <option value="auto">Auto Detect</option>
             <option value="en-IN">English</option><option value="hi-IN">Hindi</option><option value="bn-IN">Bengali</option>
             <option value="gu-IN">Gujarati</option><option value="kn-IN">Kannada</option><option value="ml-IN">Malayalam</option>
             <option value="mr-IN">Marathi</option><option value="od-IN">Odia</option><option value="pa-IN">Punjabi</option>
             <option value="ta-IN">Tamil</option><option value="te-IN">Telugu</option>
           </select>
-          <button onclick="swapLanguages()" class="w-10 h-10 flex items-center justify-center rounded-full bg-black border border-white/20 hover:border-white/40 transition-all group">
+          <button onclick="swapLanguages()" class="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-full bg-black border border-white/20 hover:border-white/40 transition-all group">
             <span class="material-icons-round text-white text-lg group-hover:rotate-180 transition-transform duration-300">swap_horiz</span>
           </button>
-          <select id="tr-target" class="glass-select">
+          <select id="tr-target" class="glass-select text-xs md:text-sm">
             <option value="hi-IN">Hindi</option><option value="en-IN">English</option><option value="bn-IN">Bengali</option>
             <option value="gu-IN">Gujarati</option><option value="kn-IN">Kannada</option><option value="ml-IN">Malayalam</option>
             <option value="mr-IN">Marathi</option><option value="od-IN">Odia</option><option value="pa-IN">Punjabi</option>
             <option value="ta-IN">Tamil</option><option value="te-IN">Telugu</option>
           </select>
         </div>
-        <div class="w-full max-w-7xl flex flex-col lg:flex-row gap-6 lg:gap-8 flex-1 min-h-0 max-h-[600px]">
-          <div class="glass-panel flex-1 rounded-2xl p-8 flex flex-col hover:border-white/10 transition-colors duration-500">
-            <div class="flex justify-between items-center mb-4">
+        <div class="w-full max-w-7xl flex flex-col lg:flex-row gap-3 md:gap-6 lg:gap-8 flex-1 min-h-0 max-h-none md:max-h-[600px]">
+          <div class="glass-panel flex-1 rounded-xl md:rounded-2xl p-4 md:p-8 flex flex-col hover:border-white/10 transition-colors duration-500 min-h-[120px] md:min-h-0">
+            <div class="flex justify-between items-center mb-2 md:mb-4">
               <span class="text-[10px] font-bold text-gray-600 uppercase tracking-[0.2em]">Source</span>
               <button onclick="document.getElementById('tr-input').value='';document.getElementById('tr-count').textContent='0'" class="text-gray-600 hover:text-white transition-colors"><span class="material-icons-round text-base">close</span></button>
             </div>
-            <textarea id="tr-input" class="w-full flex-1 bg-transparent border-none resize-none focus:ring-0 focus:outline-none text-xl lg:text-2xl text-white placeholder-gray-800 leading-relaxed font-display font-light tracking-tight" placeholder="Enter text to translate..."></textarea>
+            <textarea id="tr-input" class="w-full flex-1 bg-transparent border-none resize-none focus:ring-0 focus:outline-none text-base md:text-xl lg:text-2xl text-white placeholder-gray-800 leading-relaxed font-display font-light tracking-tight" placeholder="Enter text to translate..."></textarea>
             <div class="mt-4 pt-4 border-t border-white/5">
               <span class="text-[10px] text-gray-600 font-mono tracking-wider"><span id="tr-count">0</span> / 2000</span>
             </div>
           </div>
-          <div class="glass-panel flex-1 rounded-2xl p-8 flex flex-col bg-gradient-to-br from-white/[0.02] to-transparent">
-            <div class="flex justify-between items-center mb-4">
+          <div class="glass-panel flex-1 rounded-xl md:rounded-2xl p-4 md:p-8 flex flex-col bg-gradient-to-br from-white/[0.02] to-transparent min-h-[120px] md:min-h-0">
+            <div class="flex justify-between items-center mb-2 md:mb-4">
               <span class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] flex items-center gap-2">
                 <span class="w-1 h-1 rounded-full bg-white animate-pulse-slow"></span> Translated
               </span>
               <button onclick="navigator.clipboard.writeText(document.getElementById('tr-output').textContent)" class="text-gray-600 hover:text-white transition-colors"><span class="material-icons-round text-base">content_copy</span></button>
             </div>
-            <div id="tr-output" class="flex-1 overflow-y-auto text-xl lg:text-2xl text-white/60 leading-relaxed font-display font-light tracking-tight">Translation will appear here...</div>
+            <div id="tr-output" class="flex-1 overflow-y-auto text-base md:text-xl lg:text-2xl text-white/60 leading-relaxed font-display font-light tracking-tight">Translation will appear here...</div>
           </div>
         </div>
-        <div class="mt-8">
-          <button onclick="doTranslate()" class="btn-glow px-10 py-4 bg-white text-black rounded-xl font-bold uppercase tracking-widest text-xs shadow-[0_0_30px_rgba(255,255,255,0.15)] hover:-translate-y-0.5 transition-all flex items-center gap-3">
+        <div class="mt-4 md:mt-8">
+          <button onclick="doTranslate()" class="btn-glow px-6 md:px-10 py-3 md:py-4 bg-white text-black rounded-xl font-bold uppercase tracking-widest text-xs shadow-[0_0_30px_rgba(255,255,255,0.15)] hover:-translate-y-0.5 transition-all flex items-center gap-3">
             <span class="material-icons-round text-lg">arrow_forward</span> Translate
           </button>
         </div>
@@ -159,11 +192,11 @@
 
     <!-- ──── TEXT TO SPEECH PAGE ──── -->
     <section class="page" id="page-tts">
-      <header class="h-20 px-8 flex items-center border-b border-white/5 bg-transparent backdrop-blur-sm shrink-0">
-        <h1 class="text-3xl font-display font-medium text-white tracking-tighter">Text to Speech</h1>
+      <header class="h-14 md:h-20 px-4 md:px-8 flex items-center border-b border-white/5 bg-transparent backdrop-blur-sm shrink-0">
+        <h1 class="text-xl md:text-3xl font-display font-medium text-white tracking-tighter">Text to Speech</h1>
       </header>
-      <div class="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
-        <div class="flex-1 flex flex-col p-6 lg:p-10 overflow-y-auto custom-scrollbar">
+      <div class="flex-1 flex flex-col lg:flex-row overflow-hidden relative pb-16 md:pb-0">
+        <div class="flex-1 flex flex-col p-3 md:p-6 lg:p-10 overflow-y-auto custom-scrollbar">
           <!-- Model cards -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 max-w-4xl">
             <div class="tts-model-card selected group relative cursor-pointer" onclick="selectTTSModel('bulbul:v3',this)">
@@ -248,11 +281,11 @@
 
     <!-- ──── SPEECH TO TEXT PAGE ──── -->
     <section class="page" id="page-stt">
-      <header class="h-20 px-8 flex items-center justify-between border-b border-white/5 bg-transparent backdrop-blur-sm shrink-0">
-        <h1 class="text-3xl font-display font-medium text-white tracking-tighter">Speech to Text</h1>
-        <span class="px-2 py-0.5 rounded text-[10px] font-mono border border-amber-500/30 text-amber-400 tracking-widest">SAARAS v3</span>
+      <header class="h-14 md:h-20 px-4 md:px-8 flex items-center justify-between border-b border-white/5 bg-transparent backdrop-blur-sm shrink-0">
+        <h1 class="text-xl md:text-3xl font-display font-medium text-white tracking-tighter">Speech to Text</h1>
+        <span class="px-2 py-0.5 rounded text-[9px] md:text-[10px] font-mono border border-amber-500/30 text-amber-400 tracking-widest">PARAS v3</span>
       </header>
-      <div class="flex-1 px-8 pb-8 grid grid-cols-1 xl:grid-cols-12 gap-8 h-full overflow-hidden pt-6">
+      <div class="flex-1 px-3 md:px-8 pb-20 md:pb-8 grid grid-cols-1 xl:grid-cols-12 gap-4 md:gap-8 h-full overflow-y-auto xl:overflow-hidden pt-4 md:pt-6">
         <div class="xl:col-span-7 flex flex-col items-center justify-center relative">
           <!-- Tabs -->
           <div class="bg-black/40 p-1 rounded-full flex items-center mb-10 border border-white/10 backdrop-blur-md">
@@ -261,7 +294,7 @@
           </div>
           <!-- Upload -->
           <div id="stt-upload-panel" class="stt-panel w-full max-w-lg">
-            <div class="glass-panel rounded-2xl p-12 flex flex-col items-center gap-4 cursor-pointer hover:border-white/20 transition-all" id="stt-dropzone">
+            <div class="glass-panel rounded-xl md:rounded-2xl p-6 md:p-12 flex flex-col items-center gap-3 md:gap-4 cursor-pointer hover:border-white/20 transition-all" id="stt-dropzone">
               <input type="file" id="stt-file" accept="audio/*" hidden />
               <span class="material-icons-round text-4xl text-gray-600">cloud_upload</span>
               <p class="text-gray-400">Drag & drop audio file or <span class="text-white underline">browse</span></p>
@@ -276,7 +309,7 @@
                 <option value="pa-IN">Punjabi</option><option value="ta-IN">Tamil</option><option value="te-IN">Telugu</option>
               </select>
               <select id="stt-model" class="glass-select flex-1">
-                <option value="saaras:v3">Saaras v3</option><option value="saarika:v2.5">Saarika v2.5</option>
+                <option value="saaras:v3">Paras v3</option><option value="saarika:v2.5">Paras v2.5</option>
               </select>
             </div>
             <button onclick="doSTT()" class="mt-6 w-full bg-white hover:bg-gray-100 text-black font-bold py-3 rounded-lg shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-all flex items-center justify-center gap-2">
@@ -329,40 +362,40 @@
 
     <!-- ──── TRANSLITERATE PAGE ──── -->
     <section class="page" id="page-transliterate">
-      <header class="h-20 px-8 flex items-center justify-between border-b border-white/5 bg-transparent backdrop-blur-sm shrink-0">
-        <h1 class="text-3xl font-display font-medium text-white tracking-tighter">Transliterate</h1>
-        <span class="px-2 py-0.5 rounded text-[10px] font-mono border border-pink-500/30 text-pink-400 tracking-widest">SCRIPT CONVERSION</span>
+      <header class="h-14 md:h-20 px-4 md:px-8 flex items-center justify-between border-b border-white/5 bg-transparent backdrop-blur-sm shrink-0">
+        <h1 class="text-xl md:text-3xl font-display font-medium text-white tracking-tighter">Transliterate</h1>
+        <span class="hidden md:inline px-2 py-0.5 rounded text-[10px] font-mono border border-pink-500/30 text-pink-400 tracking-widest">SCRIPT CONVERSION</span>
       </header>
-      <div class="flex-1 p-6 lg:p-10 flex flex-col items-center justify-center overflow-y-auto">
-        <div class="flex items-center gap-6 mb-8">
-          <select id="tl-source" class="glass-select">
+      <div class="flex-1 p-3 md:p-6 lg:p-10 flex flex-col items-center justify-start md:justify-center overflow-y-auto pb-20 md:pb-6">
+        <div class="flex items-center gap-2 md:gap-6 mb-4 md:mb-8 flex-wrap justify-center">
+          <select id="tl-source" class="glass-select text-xs md:text-sm">
             <option value="en-IN">English (Latin)</option><option value="hi-IN">Hindi (Devanagari)</option>
             <option value="bn-IN">Bengali</option><option value="gu-IN">Gujarati</option><option value="kn-IN">Kannada</option>
             <option value="ml-IN">Malayalam</option><option value="mr-IN">Marathi</option><option value="ta-IN">Tamil</option><option value="te-IN">Telugu</option>
           </select>
-          <button onclick="swapTranslit()" class="w-10 h-10 flex items-center justify-center rounded-full bg-black border border-white/20 hover:border-white/40 transition-all group">
+          <button onclick="swapTranslit()" class="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-full bg-black border border-white/20 hover:border-white/40 transition-all group">
             <span class="material-icons-round text-white text-lg group-hover:rotate-180 transition-transform duration-300">swap_horiz</span>
           </button>
-          <select id="tl-target" class="glass-select">
+          <select id="tl-target" class="glass-select text-xs md:text-sm">
             <option value="hi-IN">Hindi (Devanagari)</option><option value="en-IN">English (Latin)</option>
             <option value="bn-IN">Bengali</option><option value="gu-IN">Gujarati</option><option value="kn-IN">Kannada</option>
             <option value="ml-IN">Malayalam</option><option value="mr-IN">Marathi</option><option value="ta-IN">Tamil</option><option value="te-IN">Telugu</option>
           </select>
         </div>
-        <div class="w-full max-w-7xl flex flex-col lg:flex-row gap-6 lg:gap-8 flex-1 min-h-0 max-h-[500px]">
-          <div class="glass-panel flex-1 rounded-2xl p-8 flex flex-col hover:border-white/10 transition-colors duration-500">
-            <span class="text-[10px] font-bold text-gray-600 uppercase tracking-[0.2em] mb-4">Source Script</span>
-            <textarea id="tl-input" class="w-full flex-1 bg-transparent border-none resize-none focus:ring-0 focus:outline-none text-xl text-white placeholder-gray-800 leading-relaxed font-display font-light" placeholder="e.g. namaste → नमस्ते"></textarea>
+        <div class="w-full max-w-7xl flex flex-col lg:flex-row gap-3 md:gap-6 lg:gap-8 flex-1 min-h-0 max-h-none md:max-h-[500px]">
+          <div class="glass-panel flex-1 rounded-xl md:rounded-2xl p-4 md:p-8 flex flex-col hover:border-white/10 transition-colors duration-500 min-h-[120px] md:min-h-0">
+            <span class="text-[10px] font-bold text-gray-600 uppercase tracking-[0.2em] mb-2 md:mb-4">Source Script</span>
+            <textarea id="tl-input" class="w-full flex-1 bg-transparent border-none resize-none focus:ring-0 focus:outline-none text-base md:text-xl text-white placeholder-gray-800 leading-relaxed font-display font-light" placeholder="e.g. namaste → नमस्ते"></textarea>
           </div>
-          <div class="glass-panel flex-1 rounded-2xl p-8 flex flex-col bg-gradient-to-br from-white/[0.02] to-transparent">
-            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+          <div class="glass-panel flex-1 rounded-xl md:rounded-2xl p-4 md:p-8 flex flex-col bg-gradient-to-br from-white/[0.02] to-transparent min-h-[120px] md:min-h-0">
+            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-2 md:mb-4 flex items-center gap-2">
               <span class="w-1 h-1 rounded-full bg-pink-400 animate-pulse-slow"></span> Transliterated
             </span>
-            <div id="tl-output" class="flex-1 overflow-y-auto text-xl text-white/60 leading-relaxed font-display font-light">Transliteration will appear here...</div>
+            <div id="tl-output" class="flex-1 overflow-y-auto text-base md:text-xl text-white/60 leading-relaxed font-display font-light">Transliteration will appear here...</div>
           </div>
         </div>
-        <div class="mt-8">
-          <button onclick="doTransliterate()" class="btn-glow px-10 py-4 bg-white text-black rounded-xl font-bold uppercase tracking-widest text-xs shadow-[0_0_30px_rgba(255,255,255,0.15)] hover:-translate-y-0.5 transition-all flex items-center gap-3">
+        <div class="mt-4 md:mt-8">
+          <button onclick="doTransliterate()" class="btn-glow px-6 md:px-10 py-3 md:py-4 bg-white text-black rounded-xl font-bold uppercase tracking-widest text-xs shadow-[0_0_30px_rgba(255,255,255,0.15)] hover:-translate-y-0.5 transition-all flex items-center gap-3">
             <span class="material-icons-round text-lg">spellcheck</span> Transliterate
           </button>
         </div>
@@ -371,12 +404,12 @@
 
     <!-- ──── DETECT LANGUAGE PAGE ──── -->
     <section class="page" id="page-detect">
-      <div class="flex-1 flex flex-col items-center justify-center p-6 overflow-y-auto relative">
+      <div class="flex-1 flex flex-col items-center justify-start md:justify-center p-4 md:p-6 overflow-y-auto relative pb-20 md:pb-6">
         <div class="absolute top-[-10%] left-[20%] w-96 h-96 bg-primary/10 rounded-full blur-[100px] animate-float pointer-events-none"></div>
         <div class="absolute bottom-[-10%] right-[20%] w-96 h-96 bg-purple-500/5 rounded-full blur-[100px] animate-float pointer-events-none" style="animation-delay:2s"></div>
-        <div class="text-center mb-10 space-y-2 relative z-10">
+        <div class="text-center mb-6 md:mb-10 space-y-2 relative z-10 pt-4 md:pt-0">
           <h2 class="text-xs uppercase tracking-[0.2em] text-primary font-semibold">Language Intelligence</h2>
-          <h1 class="text-4xl md:text-5xl font-extralight text-white" style="text-shadow:0 0 20px rgba(255,255,255,0.3)">Detect Language</h1>
+          <h1 class="text-3xl md:text-5xl font-extralight text-white" style="text-shadow:0 0 20px rgba(255,255,255,0.3)">Detect Language</h1>
           <p class="text-white/40 font-light max-w-md mx-auto text-sm mt-4">Paste your text snippet below. Our neural engine will identify the language and script instantly.</p>
         </div>
         <div class="w-full max-w-3xl glass-panel rounded-3xl p-1 shadow-2xl transition-all duration-500 hover:shadow-primary/5 relative z-10">
@@ -420,13 +453,13 @@
     <!-- ──── AI CHAT PAGE ──── -->
     <section class="page" id="page-chat">
       <div class="flex-1 flex flex-col h-full relative">
-        <div class="flex-1 w-full max-w-4xl mx-auto pt-6 pb-32 px-4 sm:px-6 overflow-y-auto no-scrollbar flex flex-col gap-6" id="chat-messages">
+        <div class="flex-1 w-full max-w-4xl mx-auto pt-4 md:pt-6 pb-36 md:pb-32 px-3 sm:px-6 overflow-y-auto no-scrollbar flex flex-col gap-4 md:gap-6" id="chat-messages">
           <div class="chat-welcome flex flex-col items-center justify-center py-16">
             <div class="w-16 h-16 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(59,130,246,0.2)]">
               <span class="material-icons-round text-primary text-3xl">smart_toy</span>
             </div>
             <h3 class="text-xl font-display font-medium text-white mb-2">Paras AI Chat</h3>
-            <p class="text-gray-500 text-sm text-center max-w-md mb-8">Ask anything in English or any Indian language. Powered by Sarvam-M.</p>
+            <p class="text-gray-500 text-sm text-center max-w-md mb-8">Ask anything in English or any Indian language. Powered by Paras AI.</p>
             <div class="flex flex-wrap gap-3 justify-center">
               <button class="px-4 py-2 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 text-xs text-gray-300 transition-all hover:border-primary/50" onclick="sendSuggestion(this)">भारत की राजधानी क्या है?</button>
               <button class="px-4 py-2 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 text-xs text-gray-300 transition-all hover:border-primary/50" onclick="sendSuggestion(this)">Explain quantum computing simply</button>
@@ -435,7 +468,7 @@
           </div>
         </div>
         <!-- Floating input -->
-        <div class="absolute bottom-0 left-0 w-full z-40 pb-6 px-4">
+        <div class="absolute bottom-0 left-0 w-full z-40 pb-20 md:pb-6 px-3 md:px-4">
           <div class="max-w-3xl mx-auto relative group">
             <div class="absolute -inset-0.5 bg-gradient-to-r from-primary/30 to-purple-600/30 rounded-full blur opacity-20 group-hover:opacity-40 transition duration-1000 group-focus-within:opacity-60"></div>
             <div class="relative glass-input rounded-full flex items-center p-2 transition-all duration-300 group-focus-within:border-primary/50">
@@ -454,11 +487,11 @@
       <div class="flex-1 flex w-full h-full relative">
         <div class="flex-1 flex flex-col items-center justify-center relative">
           <!-- Orb -->
-          <div class="relative w-[350px] h-[350px] mb-6 flex items-center justify-center">
+          <div class="relative w-[220px] h-[220px] md:w-[350px] md:h-[350px] mb-4 md:mb-6 flex items-center justify-center">
             <div class="absolute inset-0 rounded-full opacity-60 animate-swirl particle-swirl" style="animation-duration:30s"></div>
             <div class="absolute inset-[10%] rounded-full opacity-80 animate-swirl particle-swirl" style="animation-duration:20s;animation-direction:reverse"></div>
             <div class="absolute inset-[25%] rounded-full opacity-100 animate-swirl particle-swirl" style="animation-duration:15s"></div>
-            <div class="absolute w-[140px] h-[140px] bg-white rounded-full blur-[60px] opacity-20 animate-pulse-fast"></div>
+            <div class="absolute w-[80px] h-[80px] md:w-[140px] md:h-[140px] bg-white rounded-full blur-[40px] md:blur-[60px] opacity-20 animate-pulse-fast"></div>
             <div class="vc-orb-ring" id="vc-orb-ring"></div>
             <button class="vc-orb-btn relative z-10 w-24 h-24 flex items-center justify-center" id="vc-orb-btn" onclick="vcToggle()">
               <svg id="vc-icon-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="36" height="36"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
@@ -467,8 +500,8 @@
               <svg id="vc-icon-speaking" class="hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="36" height="36"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 010 14.14"/><path d="M15.54 8.46a5 5 0 010 7.07"/></svg>
             </button>
           </div>
-          <div class="mb-4 flex flex-col items-center gap-1 z-20">
-            <span class="text-2xl md:text-3xl font-bold tracking-tighter text-white" id="vc-state-label">Tap to start conversation</span>
+          <div class="mb-2 md:mb-4 flex flex-col items-center gap-1 z-20">
+            <span class="text-lg md:text-3xl font-bold tracking-tighter text-white text-center px-4" id="vc-state-label">Tap to start conversation</span>
             <div class="text-3xl font-display font-thin text-white/60 tracking-tighter tabular-nums" id="vc-time"></div>
           </div>
           <canvas id="vc-visualizer" width="400" height="50" class="vc-visualizer hidden rounded-lg mb-4"></canvas>
@@ -477,7 +510,7 @@
               <span class="material-icons-round text-lg">close</span> End Conversation
             </button>
           </div>
-          <div class="w-full max-w-xl mt-8 max-h-[200px] overflow-y-auto no-scrollbar relative z-20" id="vc-transcript">
+          <div class="w-full max-w-xl mt-4 md:mt-8 max-h-[150px] md:max-h-[200px] overflow-y-auto no-scrollbar relative z-20 mb-16 md:mb-0" id="vc-transcript">
             <div class="vc-welcome flex flex-col items-center py-4" id="vc-welcome">
               <p class="text-gray-600 text-xs text-center">Press the orb and start speaking.<br>The AI will listen, think, and reply with its voice.</p>
             </div>
